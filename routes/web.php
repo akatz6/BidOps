@@ -22,6 +22,8 @@ Route::resource('/property', 'PropertyController');
 Route::resource('/inventory', 'InventoryController');
 Route::resource('/', 'ViewInventoryController');
 Route::get('/viewInventory', 'ViewInventoryController@create');
+Route::get('/viewInventoryWithId/{id}', 'ViewInventoryController@filterByCategory');
+Route::get('/sumOnProperty/{id}/{propId}', 'ViewInventoryController@sumOnProperty');
 Route::get('/categories', 'CategoryController@create');
 Route::get('/propeties', 'PropertyController@create');
 Route::get('/inventories', 'InventoryController@create');

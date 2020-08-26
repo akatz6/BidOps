@@ -2854,6 +2854,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -2863,11 +2883,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       inventoryArray: [],
       propertyArray: [],
+      propertySumArray: [],
       categoryArray: [],
       objProperties: {},
       objCategories: {},
       propertiesPerInventory: [],
-      categoryPerInventory: []
+      categoryPerInventory: [],
+      propertyId: -1,
+      sum: 0,
+      seeSum: false,
+      propertySum: ""
     };
   },
   methods: {
@@ -2875,8 +2900,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var result, _iterator, _step, prop, _iterator2, _step2, cat;
-
+        var result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2888,55 +2912,155 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 result = _context.sent;
-                _this.inventoryArray = result.data.inventory;
-                _this.propertyArray = result.data.property;
-                _this.categoryArray = result.data.category;
-                _iterator = _createForOfIteratorHelper(_this.propertyArray);
 
-                try {
-                  for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                    prop = _step.value;
-                    _this.objProperties[prop.id] = prop.property;
-                  }
-                } catch (err) {
-                  _iterator.e(err);
-                } finally {
-                  _iterator.f();
-                }
+                _this.setPropertiesCategories(result);
 
-                _iterator2 = _createForOfIteratorHelper(_this.categoryArray);
-
-                try {
-                  for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-                    cat = _step2.value;
-                    _this.objCategories[cat.id] = cat.category;
-                  }
-                } catch (err) {
-                  _iterator2.e(err);
-                } finally {
-                  _iterator2.f();
-                }
-
-                _this.inventoryArray.forEach(function (element) {
-                  element.all_properties = JSON.parse(element.all_properties);
-                  var str = "";
-
-                  for (var val in element.all_properties) {
-                    str += "".concat(_this.objProperties[val], ": ").concat(element.all_properties[val], ", ");
-                  }
-
-                  _this.propertiesPerInventory.push(str.slice(0, str.length - 2));
-
-                  _this.categoryPerInventory.push(_this.objCategories[element.category_id]);
-                });
-
-              case 11:
+              case 4:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    onChange: function onChange(e) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var id, result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                id = e.target.value;
+
+                if (!(id === "Default Value")) {
+                  _context2.next = 5;
+                  break;
+                }
+
+                _this2.getViewInventory();
+
+                _this2.propertyId = -1;
+                return _context2.abrupt("return");
+
+              case 5:
+                _this2.propertyId = id;
+                _context2.next = 8;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/viewInventoryWithId/".concat(id))["catch"](function (err) {
+                  return console.log(err);
+                });
+
+              case 8:
+                result = _context2.sent;
+
+                _this2.setPropertiesCategories(result);
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    onChangeProperty: function onChangeProperty(e) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this3.propertySum = e.target.value;
+
+              case 1:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    getSum: function getSum() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var id, result;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.sum = 0;
+                id = _this4.propertySum;
+                _this4.seeSum = true;
+                _context4.next = 5;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/sumOnProperty/".concat(id, "/").concat(_this4.propertyId))["catch"](function (err) {
+                  return console.log(err);
+                });
+
+              case 5:
+                result = _context4.sent;
+                _this4.sum = result.data;
+
+              case 7:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    setPropertiesCategories: function setPropertiesCategories(result) {
+      var _this5 = this;
+
+      this.inventoryArray = result.data.inventory;
+      this.propertyArray = result.data.property;
+      this.categoryArray = result.data.category;
+      this.propertySumArray = result.data.propertySum;
+
+      var _iterator = _createForOfIteratorHelper(this.propertyArray),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var prop = _step.value;
+          this.objProperties[prop.id] = prop.property;
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      var _iterator2 = _createForOfIteratorHelper(this.categoryArray),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var cat = _step2.value;
+          this.objCategories[cat.id] = cat.category;
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      this.propertiesPerInventory = [];
+      this.categoryPerInventory = [];
+      this.inventoryArray.forEach(function (element) {
+        element.all_properties = JSON.parse(element.all_properties);
+        var str = "";
+
+        for (var val in element.all_properties) {
+          str += "".concat(_this5.objProperties[val], ": ").concat(element.all_properties[val], ", ");
+        }
+
+        _this5.propertiesPerInventory.push(str.slice(0, str.length - 2));
+
+        _this5.categoryPerInventory.push(_this5.objCategories[element.category_id]);
+      });
     }
   }
 });
@@ -40923,6 +41047,114 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("label", { attrs: { for: "category" } }, [
+      _vm._v("Filter on a category")
+    ]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.category,
+            expression: "category"
+          }
+        ],
+        staticClass: "form-control",
+        on: {
+          change: [
+            function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.category = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            },
+            function($event) {
+              return _vm.onChange($event)
+            }
+          ]
+        }
+      },
+      [
+        _c("option", [_vm._v("Default Value")]),
+        _vm._v(" "),
+        _vm._l(_vm.categoryArray, function(category) {
+          return _c(
+            "option",
+            { key: category.id, domProps: { value: category.id } },
+            [_vm._v(_vm._s(category.category))]
+          )
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("label", { attrs: { for: "property" } }, [_vm._v("Sum on property")]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.property,
+            expression: "property"
+          }
+        ],
+        staticClass: "form-control",
+        on: {
+          change: [
+            function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.property = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            },
+            function($event) {
+              return _vm.onChangeProperty($event)
+            }
+          ]
+        }
+      },
+      [
+        _c("option", [_vm._v("Default Value")]),
+        _vm._v(" "),
+        _vm._l(_vm.propertySumArray, function(property) {
+          return _c(
+            "option",
+            { key: property.id, domProps: { value: property.id } },
+            [_vm._v(_vm._s(property.property))]
+          )
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c("button", { staticClass: "btn btn-dark", on: { click: _vm.getSum } }, [
+      _vm._v("See Sum")
+    ]),
+    _vm._v(" "),
+    _vm.seeSum ? _c("p", [_vm._v(_vm._s(_vm.sum))]) : _vm._e(),
+    _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(0),
       _vm._v(" "),
