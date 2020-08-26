@@ -14,7 +14,7 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        //
+        return view('welcome');
     }
 
     /**
@@ -36,64 +36,37 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'property' => 'required',
-            'type' => 'required'
-        ]); 
+        $this->validateInfo($request);
         $info = $request->all();
         $propertyFound = Property::where('property', $info['property'])->first();
         if(count($propertyFound ) > 0){
             return response('Property already exists', 300);
         }
+        $this->saveProperty($info);
+        return response('Ok', 200);
+    }
+
+    /*
+        validates that properties are correct
+        @param info for properties
+        @return error message 
+    */
+    private function validateInfo($request){
+        $this->validate($request,[
+            'property' => 'required',
+            'type' => 'required'
+        ]); 
+    }
+
+    /*
+        save the properties
+        @param info for properties
+        @return error message 
+    */
+    private function saveProperty($info){
         $property = new Property;
         $property->property = $info['property'];
         $property->type = $info['type'];
         $property->save();
-        return response('Ok', 200);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Property $property)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Property $property)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Property $property)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Property $property)
-    {
-        //
     }
 }

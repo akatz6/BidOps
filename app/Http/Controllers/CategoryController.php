@@ -37,40 +37,36 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'category' => 'required',
-        ]); 
+        $this->validateInfo($request);
         $info = $request->all();
         $categoryFound = Category::where('category', $info['category'])->first();
         if(count($categoryFound ) > 0){
             return response('Category already exists', 300);
         }
-        $category = new Category;
-        $category->category = $info['category'];
-        $category->save();
+        $this->saveInfo($info);
         return response('Ok', 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        
+    /*
+        validates info for database
+        @param all use entered info
+        @return error message 
+    */
+    private function validateInfo($request){
+        $this->validate($request,[
+            'category' => 'required',
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        
+    /*
+        validates info for database
+        @param all use entered info
+        @return error message 
+    */
+    private function saveInfo($info){
+        $category = new Category;
+        $category->category = $info['category'];
+        $category->save();
     }
 
     /**

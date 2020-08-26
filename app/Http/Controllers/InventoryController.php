@@ -89,7 +89,7 @@ class InventoryController extends Controller
     }
 
     /*
-        validates infor for database
+        validates info for database
         @param all use entered info
         @return error message 
     */
@@ -100,39 +100,15 @@ class InventoryController extends Controller
             'all_properties' => 'required'
         ]); 
     }
-
-
-      /*
+     
+    /*
         gets the ids for the properties
         @param none
         @return object with ids that are numeric
     */
     private function getIds(){
-        $property = Property::where('type', 'numeric')->get();
-        
+        $property = Property::where('type', 'numeric')->get();   
         return $property->pluck("id");
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Inventory  $inventory
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Inventory $inventory)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Inventory  $inventory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Inventory $inventory)
-    {
-        //
     }
 
     /**

@@ -16,7 +16,7 @@ class CreatePropertiesTable extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('property')->unique();
-            $table->set('type', ['numeric', 'text']);
+            $table->enum('type', ['numeric', 'text']);
             $table->timestamps();
         });
     }
