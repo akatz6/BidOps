@@ -39,7 +39,7 @@ class PropertyController extends Controller
         $this->validateInfo($request);
         $info = $request->all();
         $propertyFound = Property::where('property', $info['property'])->first();
-        if(count($propertyFound ) > 0){
+        if (count($propertyFound) > 0) {
             return response('Property already exists', 300);
         }
         $this->saveProperty($info);
@@ -51,11 +51,12 @@ class PropertyController extends Controller
         @param info for properties
         @return error message 
     */
-    private function validateInfo($request){
-        $this->validate($request,[
+    private function validateInfo($request)
+    {
+        $this->validate($request, [
             'property' => 'required',
             'type' => 'required'
-        ]); 
+        ]);
     }
 
     /*
@@ -63,7 +64,8 @@ class PropertyController extends Controller
         @param info for properties
         @return error message 
     */
-    private function saveProperty($info){
+    private function saveProperty($info)
+    {
         $property = new Property;
         $property->property = $info['property'];
         $property->type = $info['type'];

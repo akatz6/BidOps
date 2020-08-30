@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $this->validateInfo($request);
         $info = $request->all();
         $categoryFound = Category::where('category', $info['category'])->first();
-        if(count($categoryFound ) > 0){
+        if (count($categoryFound) > 0) {
             return response('Category already exists', 300);
         }
         $this->saveInfo($info);
@@ -52,8 +52,9 @@ class CategoryController extends Controller
         @param all use entered info
         @return error message 
     */
-    private function validateInfo($request){
-        $this->validate($request,[
+    private function validateInfo($request)
+    {
+        $this->validate($request, [
             'category' => 'required',
         ]);
     }
@@ -63,7 +64,8 @@ class CategoryController extends Controller
         @param all use entered info
         @return error message 
     */
-    private function saveInfo($info){
+    private function saveInfo($info)
+    {
         $category = new Category;
         $category->category = $info['category'];
         $category->save();
@@ -89,19 +91,21 @@ class CategoryController extends Controller
         @param $info
         @return \Illuminate\Http\Response
     */
-    private function validateupdate($request){
-        $this->validate($request,[
+    private function validateupdate($request)
+    {
+        $this->validate($request, [
             'id' => 'required',
             'selected' => 'required',
-        ]); 
+        ]);
     }
 
     /*
         Updates Category
         @param $info
     */
-    private function updateInfo($info){
-        if(isset($info["id"])){
+    private function updateInfo($info)
+    {
+        if (isset($info["id"])) {
             $category = Category::find($info["id"]);
             $category->category = $info["selected"];
             $category->save();
@@ -116,12 +120,12 @@ class CategoryController extends Controller
     public function destroy(Request $request)
     {
         $info = $request->all();
-        if($info["id"] !== null){
+        if ($info["id"] !== null) {
             $category = Category::find($info["id"]);
             $category->category = "none";
             $category->save();
             return response('Ok', 200);
-        }else{
+        } else {
             return response('Category Not Selected', 300);
         }
     }

@@ -63,7 +63,7 @@ export default {
         this.$emit("getCategories");
       }
       setTimeout(() => {
-         this.alert = false;
+        this.alert = false;
       }, 3000);
     },
   },

@@ -53,7 +53,7 @@ export default {
         })
         .catch((err) => {
           this.propertyError = true;
-         
+
           if (err.response.data === "Property already exists") {
             bus.$emit("errorAlert", err.response.data);
           } else if (err.response.data.errors.property) {

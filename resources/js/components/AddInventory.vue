@@ -1,22 +1,73 @@
 <template>
   <div>
-    <div v-if="categorySaved" class="alert alert-success" role="alert">{{successText}}</div>
-    <div v-if="categoryError" class="alert alert-danger" role="alert">{{errorText}}</div>
+    <div v-if="alert">
+      <Alert />
+    </div>
     <div id="inventory">
-      <AddInventory />
-      <EditInventory />
+      <form @submit.prevent="formSubmit">
+        <div class="form-group">
+          <label for="inventory">Enter new inventory</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inventory"
+            aria-describedby="inventoryHelp"
+            placeholder="Enter new Inventory"
+            v-model="inventory"
+          />
+        </div>
+        <br />
+        <label for="category">Choose a category</label>
+        <select v-model="categoryArray.id" @change="onChange($event)" class="form-control">
+          <option value>Default Value</option>
+          <option
+            v-for="category in categoryArray"
+            :key="category.id"
+            :value="category.id"
+          >{{category.category}}</option>
+        </select>
+
+        <br />
+        <div
+          class="form-group"
+          v-for="property in propertyArray"
+          :key="property.id"
+          :value="property.id"
+        >
+          <label for="property">{{property.property}}</label>
+          <input
+            v-if="property.type === 'text'"
+            type="text"
+            placeholder="Enter text here"
+            class="form-control"
+            :id="property.id"
+            v-bind="propertyInfo"
+            @change="addProperty($event)"
+          />
+          <input
+            v-else
+            type="number"
+            placeholder="Enter number here"
+            class="form-control"
+            :id="property.id"
+            v-bind="propertyInfo"
+            @change="addProperty($event)"
+          />
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import AddInventory from "./AddInventory.vue";
-import EditInventory from "./EditInventory.vue";
+import Alert from "./Alert.vue";
+import { bus } from "../app";
 export default {
   components: {
-    AddInventory,
-    EditInventory,
+    Alert,
   },
   mounted() {
     this.getCategories();
@@ -25,10 +76,6 @@ export default {
   },
   data() {
     return {
-      successText: "",
-      errorText: "",
-      categorySaved: false,
-      categoryError: false,
       categoryArray: [],
       propertyArray: [],
       inventoryArray: [],
@@ -45,6 +92,7 @@ export default {
       propertiesArr: [],
       editShow: false,
       editCategory: "",
+      alert: false,
     };
   },
   methods: {
@@ -67,22 +115,33 @@ export default {
       this.propertyArray = result.data;
     },
     async formSubmit() {
+      this.alert = true;
       const result = await axios
         .post("/inventory", {
           inventory: this.inventory,
           category_id: this.categoryId,
           all_properties: this.allProperties,
         })
-        .catch((err) => {});
+        .catch((err) => {
+          if (err.response.data === "Inventory already exists") {
+            bus.$emit("errorAlert", "Inventory already exists");
+          } else if (err.response.data.errors.all_properties) {
+            bus.$emit("errorAlert", err.response.data.errors.all_properties[0]);
+          } else if (err.response.data.errors.category_id) {
+            bus.$emit("errorAlert", "Category needs to be selected");
+          } else if (err.response.data.errors.inventory) {
+            bus.$emit("errorAlert", err.response.data.errors.inventory[0]);
+          } else {
+            console.log(err);
+          }
+        });
       if (result) {
-        this.categorySaved = true;
-        this.successText = "New Inventory Has Been Saved!";
-        setTimeout(() => {
-          this.categorySaved = false;
-        }, 3000);
-        this.inventory = "";
+        bus.$emit("successAlert", "New Inventory Has Been Saved!");
         this.getInventories();
       }
+      setTimeout(() => {
+        this.alert = false;
+      }, 3000);
     },
     addProperty(e) {
       this.allProperties[e.target.id] = e.target.value;
@@ -114,48 +173,8 @@ export default {
     editProperty(event) {
       this.propertyObjectEdit[event.target.id] = event.target.value;
     },
-    async getFormValues() {
-      const result = await axios
-        .post("/inventory/update", {
-          id: this.inventoryChosen,
-          inventory: this.selectedInventory,
-          category_id: this.editCategory,
-          all_properties: this.propertyObjectEdit,
-        })
-        .catch((err) => {});
-      if (result) {
-        this.categorySaved = true;
-        this.successText = "Inventory Has Been Updated!";
-        setTimeout(() => {
-          this.categorySaved = false;
-        }, 3000);
-        this.category = "";
-        this.getCategories();
-      }
-    },
-    async erase() {
-      const result = await axios
-        .post("/inventory/delete", {
-          id: this.inventoryChosen,
-        })
-        .catch((err) => {});
-      if (result) {
-        this.categorySaved = true;
-        this.successText = "Inventory Has Been Deleted!";
-        setTimeout(() => {
-          this.categorySaved = false;
-        }, 3000);
-        this.editShow = false;
-        this.getInventories();
-      }
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
-#inventory {
-  display: flex;
-  padding-top: 5%;
-  justify-content: space-around;
-}
 </style>
