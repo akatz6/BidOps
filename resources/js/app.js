@@ -28,6 +28,7 @@ Vue.component("main-page", require("./components/MainPage.vue").default);
  */
 import router from "./router";
 
+export const bus = new Vue();
 
 const app = new Vue({
     el: "#app",

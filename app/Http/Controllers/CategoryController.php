@@ -116,19 +116,13 @@ class CategoryController extends Controller
     public function destroy(Request $request)
     {
         $info = $request->all();
-        $this->deleteCategory($info);
-        return response('Ok', 200);
-    }
-
-     /*
-        Delete Category
-        @param $info
-    */
-    private function deleteCategory($info){
-        if(isset($info["id"])){
+        if($info["id"] !== null){
             $category = Category::find($info["id"]);
             $category->category = "none";
             $category->save();
+            return response('Ok', 200);
+        }else{
+            return response('Category Not Selected', 300);
         }
     }
 }

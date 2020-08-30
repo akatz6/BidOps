@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div v-if="propertySaved" class="alert alert-success" role="alert">New Property Has Been Saved!</div>
-    <div v-if="propertyError" class="alert alert-danger" role="alert">{{errorText}}</div>
+    <Alert />
     <h1>Add Property</h1>
     <form @submit.prevent="formSubmit">
       <div class="form-group">
@@ -15,6 +14,7 @@
           v-model="property"
         />
       </div>
+      <label for="property">Select type</label>
       <select v-model="type" value="type" id="type" class="form-control">
         <option>Default select</option>
         <option value="numeric" id="numeric">Numeric</option>
@@ -28,7 +28,12 @@
 
 <script>
 import axios from "axios";
+import Alert from "./Alert.vue";
+import { bus } from "../app";
 export default {
+  components: {
+    Alert,
+  },
   mounted() {},
   data() {
     return {
@@ -48,24 +53,19 @@ export default {
         })
         .catch((err) => {
           this.propertyError = true;
-          if(err.response.data === "Property already exists"){
-              this.errorText = err.response.data;
+         
+          if (err.response.data === "Property already exists") {
+            bus.$emit("errorAlert", err.response.data);
           } else if (err.response.data.errors.property) {
-            this.errorText = err.response.data.errors.property[0];
+            bus.$emit("errorAlert", err.response.data.errors.property[0]);
           } else if (err.response.data.errors.type) {
-            this.errorText = err.response.data.errors.type;
+            bus.$emit("errorAlert", err.response.data.errors.type[0]);
           } else {
-            console.log(err);  
+            console.log(err);
           }
-          setTimeout( () =>  {
-            this.propertyError = false;
-          }, 3000);
         });
       if (result) {
-        this.propertySaved = true;
-        setTimeout( () =>  {
-          this.propertySaved = false;
-        }, 3000);
+        bus.$emit("successAlert", "Propety has been saved");
         this.property = "";
       }
     },
