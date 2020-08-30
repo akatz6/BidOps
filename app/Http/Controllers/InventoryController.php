@@ -40,29 +40,21 @@ class InventoryController extends Controller
     {
         $this->validateInfo($request);
         $info = $request->all();
-        $this->validateProperties($info['all_properties']); 
-        $this->doesExist($info);
+        $this->validateProperties($info['all_properties']);
+        $inventoryFound = Inventory::where('inventory', $info['inventory'])->first();
+        if (count($inventoryFound) > 0) {
+            return response('Inventory already exists', 300);
+        }
         $this->saveInventory($info);
         return response('Ok', 200);
     }
 
     /*
-        checks if inventory is in database
-        @param info for inventory
-        @return error message 
-    */
-    private function doesExist($info){
-        $inventoryFound = Inventory::where('inventory', $info['inventory'])->first();
-        if(count($inventoryFound ) > 0){
-            return response('Inventory already exists', 300);
-        }
-    }
-
-     /*
         saves inventory in database
         @param info for inventory
     */
-    private function saveInventory($info){
+    private function saveInventory($info)
+    {
         $inventory = new Inventory;
         $inventory->inventory = $info['inventory'];
         $inventory->category_id = $info['category_id'];
@@ -70,20 +62,21 @@ class InventoryController extends Controller
         $inventory->save();
     }
 
-     /*
+    /*
         validates that properties are correct for numeric or text
         @param info for properties
         @return error message 
     */
-    private function validateProperties($all_properties){
+    private function validateProperties($all_properties)
+    {
         $errors = [];
         $ids = $this->getIds();
-        foreach ($all_properties as $key => $value){
-            if($value !== 0 && $ids->contains($key) &&  (int)$value === 0){
-                array_push ( $errors, $value);
+        foreach ($all_properties as $key => $value) {
+            if ($value !== 0 && $ids->contains($key) &&  (int)$value === 0) {
+                array_push($errors, $value);
             }
         }
-        if(count($errors ) > 0){
+        if (count($errors) > 0) {
             return response($errors[0], 300);
         }
     }
@@ -93,21 +86,23 @@ class InventoryController extends Controller
         @param all use entered info
         @return error message 
     */
-    private function validateInfo($request){
-        $this->validate($request,[
+    private function validateInfo($request)
+    {
+        $this->validate($request, [
             'inventory' => 'required',
             'category_id' => 'required | numeric',
             'all_properties' => 'required'
-        ]); 
+        ]);
     }
-     
+
     /*
         gets the ids for the properties
         @param none
         @return object with ids that are numeric
     */
-    private function getIds(){
-        $property = Property::where('type', 'numeric')->get();   
+    private function getIds()
+    {
+        $property = Property::where('type', 'numeric')->get();
         return $property->pluck("id");
     }
 
@@ -130,7 +125,8 @@ class InventoryController extends Controller
     update inventory in database
     @param info for inventory
     */
-    private function updateInventory($info){
+    private function updateInventory($info)
+    {
         $inventory =  Inventory::find($info['id']);
         $inventory->inventory = $info['inventory'];
         $inventory->category_id = $info['category_id'];
@@ -148,20 +144,20 @@ class InventoryController extends Controller
     {
         $info = $request->all();
         Inventory::find($info['id'])->delete();
-        return response($data, 200);
+        return response("Ok", 200);
     }
 
-     /**
+    /**
      * Get all Inventory info.
      *
      * @param  \App\Inventory  $inventoryId
      * @return \Illuminate\Http\Response
      */
-    public function getInventoryById($id){
+    public function getInventoryById($id)
+    {
         $data['inventory'] = Inventory::find($id);
         $data['category'] =  Category::find($data['inventory']['category_id']);
         $data['properties'] = Property::all();
         return response($data, 200);
     }
 }
-

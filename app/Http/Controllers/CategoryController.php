@@ -76,35 +76,59 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request)
     {
+        $this->validateupdate($request);
+        $info = $request->all();
+        $this->updateInfo($info);
+        return response('Ok', 200);
+    }
+
+    /*
+        Validate Update Category
+        @param $info
+        @return \Illuminate\Http\Response
+    */
+    private function validateupdate($request){
         $this->validate($request,[
             'id' => 'required',
             'selected' => 'required',
         ]); 
-        $info = $request->all();
-        if(isset($info["id"])){
-            $category = Category::find($info["id"]);
-            $category->category = $info['selected'];
-            $category->save();
-        }
-        return response('Ok', 200);
     }
 
+    /*
+        Updates Category
+        @param $info
+    */
+    private function updateInfo($info){
+        if(isset($info["id"])){
+            $category = Category::find($info["id"]);
+            $category->category = $info["selected"];
+            $category->save();
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Category $category)
+    public function destroy(Request $request)
     {
         $info = $request->all();
+        $this->deleteCategory($info);
+        return response('Ok', 200);
+    }
+
+     /*
+        Delete Category
+        @param $info
+    */
+    private function deleteCategory($info){
         if(isset($info["id"])){
             $category = Category::find($info["id"]);
             $category->category = "none";
             $category->save();
         }
-        return response('Ok', 200);
     }
 }
