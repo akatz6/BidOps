@@ -1,70 +1,76 @@
 <template>
-  <div>
-    <div v-if="alert">
-      <Alert />
-    </div>
-    <div id="inventory">
-      <form @submit.prevent="formSubmit">
-        <div class="form-group">
-          <label for="inventory">Enter new inventory</label>
-          <input
-            type="text"
-            class="form-control"
-            id="inventory"
-            aria-describedby="inventoryHelp"
-            placeholder="Enter new Inventory"
-            v-model="inventory"
-          />
+    <div>
+        <div v-if="alert">
+            <Alert />
         </div>
-        <br />
-        <label for="category">Choose a category</label>
-        <select v-model="categoryArray.id" @change="onChange($event)" class="form-control">
-          <option value>Default Value</option>
-          <option
-            v-for="category in categoryArray"
-            :key="category.id"
-            :value="category.id"
-          >{{category.category}}</option>
-        </select>
+        <div id="inventory">
+            <form @submit.prevent="formSubmit">
+                <div class="form-group">
+                    <label for="inventory">Enter new inventory</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="inventory"
+                        aria-describedby="inventoryHelp"
+                        placeholder="Enter new Inventory"
+                        v-model="inventory"
+                    />
+                </div>
+                <br />
+                <label for="category">Choose a category</label>
+                <select
+                    v-model="categoryArray.id"
+                    @change="onChange($event)"
+                    class="form-control"
+                >
+                    <option value>Default Value</option>
+                    <option
+                        v-for="category in categoryArray"
+                        :key="category.id"
+                        :value="category.id"
+                        >{{ category.category }}</option
+                    >
+                </select>
 
-        <br />
-        <div
-          class="form-group"
-          v-for="property in propertyArray"
-          :key="property.id"
-          :value="property.id"
-        >
-          <label for="property">{{property.property}}</label>
-          <input
-            v-if="property.type === 'text'"
-            type="text"
-            placeholder="Enter text here"
-            class="form-control"
-            :id="property.id"
-            v-bind="propertyInfo"
-            @change="addProperty($event)"
-          />
-          <input
-            v-else
-            type="number"
-            placeholder="Enter number here"
-            class="form-control"
-            :id="property.id"
-            v-bind="propertyInfo"
-            @change="addProperty($event)"
-          />
+                <br />
+                <div
+                    class="form-group"
+                    v-for="property in propertyArray"
+                    :key="property.id"
+                    :value="property.id"
+                >
+                    <label for="property">{{ property.property }}</label>
+                    <input
+                        v-if="property.type === 'text'"
+                        type="text"
+                        placeholder="Enter text here"
+                        class="form-control"
+                        :id="property.id"
+                        v-bind="propertyInfo"
+                        @change="addProperty($event)"
+                    />
+                    <input
+                        v-else
+                        type="number"
+                        placeholder="Enter number here"
+                        class="form-control"
+                        :id="property.id"
+                        v-bind="propertyInfo"
+                        @change="addProperty($event)"
+                    />
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
-        <br />
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
     </div>
-  </div>
 </template>
 
 <script>
 import axios from "axios";
 import Alert from "./Alert.vue";
 import { bus } from "../app";
+import {getInventories, getCategories, getProperties} from './inventory';
 export default {
   components: {
     Alert,
@@ -78,17 +84,14 @@ export default {
     return {
       categoryArray: [],
       propertyArray: [],
-      inventoryArray: [],
       allProperties: {},
       propertyInfo: "",
       categoryId: "",
       inventory: "",
-      inventoryChosen: "",
       propertiesObj: {},
       selectedInventory: "",
       propertyObjectEdit: [],
       propertyObjectKeys: [],
-      propertyObjectValues: [],
       propertiesArr: [],
       editShow: false,
       editCategory: "",
@@ -97,22 +100,14 @@ export default {
   },
   methods: {
     async getInventories() {
-      const result = await axios
-        .get("/inventories")
-        .catch((error) => console.log(error));
-      this.inventoryArray = result.data;
+      this.inventoryArray =  await getInventories();
+      bus.$emit("newInventory");
     },
     async getCategories() {
-      const result = await axios
-        .get("/categories")
-        .catch((error) => console.log(error));
-      this.categoryArray = result.data;
+      this.categoryArray = await getCategories();
     },
     async getProperties() {
-      const result = await axios
-        .get("/propeties")
-        .catch((error) => console.log(error));
-      this.propertyArray = result.data;
+      this.propertyArray = await getProperties();
     },
     async formSubmit() {
       this.alert = true;
@@ -176,5 +171,4 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
