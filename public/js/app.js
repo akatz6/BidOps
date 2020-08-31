@@ -1926,6 +1926,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Alert_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Alert.vue */ "./resources/js/components/Alert.vue");
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./inventory */ "./resources/js/components/inventory.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1958,6 +1959,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
 
 
 
@@ -2001,19 +2003,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 3:
                 result = _context.sent;
 
-                if (result) {
-                  _this.categorySaved = true;
-                  _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("successAlert", "New Category Has Been Saved!");
-                  _this.category = "";
-
-                  _this.$emit("getCategories");
+                if (!result) {
+                  _context.next = 12;
+                  break;
                 }
 
+                _this.categorySaved = true;
+                _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("successAlert", "New Category Has Been Saved!");
+                _this.category = "";
+                _context.next = 10;
+                return Object(_inventory__WEBPACK_IMPORTED_MODULE_4__["getCategories"])();
+
+              case 10:
+                _this.categoryArray = _context.sent;
+                _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("newCategory");
+
+              case 12:
                 setTimeout(function () {
                   _this.alert = false;
                 }, 3000);
 
-              case 6:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -2041,6 +2051,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Alert_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Alert.vue */ "./resources/js/components/Alert.vue");
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./inventory */ "./resources/js/components/inventory.js");
 
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
@@ -2116,6 +2127,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -2132,17 +2149,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       categoryArray: [],
       propertyArray: [],
-      inventoryArray: [],
       allProperties: {},
       propertyInfo: "",
       categoryId: "",
       inventory: "",
-      inventoryChosen: "",
       propertiesObj: {},
       selectedInventory: "",
       propertyObjectEdit: [],
       propertyObjectKeys: [],
-      propertyObjectValues: [],
       propertiesArr: [],
       editShow: false,
       editCategory: "",
@@ -2154,19 +2168,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/inventories")["catch"](function (error) {
-                  return console.log(error);
-                });
+                return Object(_inventory__WEBPACK_IMPORTED_MODULE_4__["getInventories"])();
 
               case 2:
-                result = _context.sent;
-                _this.inventoryArray = result.data;
+                _this.inventoryArray = _context.sent;
+                _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("newInventory");
 
               case 4:
               case "end":
@@ -2180,21 +2191,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/categories")["catch"](function (error) {
-                  return console.log(error);
-                });
+                return Object(_inventory__WEBPACK_IMPORTED_MODULE_4__["getCategories"])();
 
               case 2:
-                result = _context2.sent;
-                _this2.categoryArray = result.data;
+                _this2.categoryArray = _context2.sent;
 
-              case 4:
+              case 3:
               case "end":
                 return _context2.stop();
             }
@@ -2206,21 +2213,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/propeties")["catch"](function (error) {
-                  return console.log(error);
-                });
+                return Object(_inventory__WEBPACK_IMPORTED_MODULE_4__["getProperties"])();
 
               case 2:
-                result = _context3.sent;
-                _this3.propertyArray = result.data;
+                _this3.propertyArray = _context3.sent;
 
-              case 4:
+              case 3:
               case "end":
                 return _context3.stop();
             }
@@ -2406,18 +2409,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _AddCategory_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddCategory.vue */ "./resources/js/components/AddCategory.vue");
-/* harmony import */ var _EditCategory_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EditCategory.vue */ "./resources/js/components/EditCategory.vue");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AddCategory_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddCategory.vue */ "./resources/js/components/AddCategory.vue");
+/* harmony import */ var _EditCategory_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EditCategory.vue */ "./resources/js/components/EditCategory.vue");
 //
 //
 //
@@ -2430,43 +2425,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    AddCategory: _AddCategory_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    EditCategory: _EditCategory_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    AddCategory: _AddCategory_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    EditCategory: _EditCategory_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  mounted: function mounted() {
-    this.getCategories();
-  },
+  mounted: function mounted() {},
   data: function data() {
     return {};
   },
-  methods: {
-    getCategories: function getCategories() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/categories")["catch"](function (error) {
-                  return console.log(error);
-                });
-
-              case 2:
-                result = _context.sent;
-                _this.categoryArray = result.data;
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    }
-  }
+  methods: {}
 });
 
 /***/ }),
@@ -2486,6 +2452,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Alert_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Alert.vue */ "./resources/js/components/Alert.vue");
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./inventory */ "./resources/js/components/inventory.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2520,10 +2487,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    var _this = this;
+
+    _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$on("newCategory", function () {
+      _this.getCategories();
+    });
+  },
   components: {
     Alert: _Alert_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
@@ -2542,28 +2526,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     getCategories: function getCategories() {
-      var _this = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/categories")["catch"](function (error) {
-                  return console.log(error);
-                });
+                return Object(_inventory__WEBPACK_IMPORTED_MODULE_4__["getCategories"])();
 
               case 2:
-                result = _context.sent;
-                _this.categoryArray = result.data;
+                _this2.categoryArray = _context.sent;
 
-                _this.categoryArray.forEach(function (element) {
-                  _this.myOption[element.id] = element.category;
+                _this2.categoryArray.forEach(function (element) {
+                  _this2.myOption[element.id] = element.category;
                 });
 
-              case 5:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -2576,7 +2556,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.selected = this.myOption[this.id];
     },
     edit: function edit() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var result;
@@ -2584,28 +2564,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.alert = true;
+                _this3.alert = true;
                 _context2.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/category/update", {
-                  selected: _this2.selected,
-                  id: _this2.id
+                  selected: _this3.selected,
+                  id: _this3.id
                 })["catch"](function (error) {
                   _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("errorAlert", "Please select Category");
                 });
 
               case 3:
                 result = _context2.sent;
-                _this2.selected = "";
+                _this3.selected = "";
 
                 if (result) {
                   _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("successAlert", "Category has been Updated!");
-                  _this2.category = "";
+                  _this3.category = "";
 
-                  _this2.getCategories();
+                  _this3.getCategories();
                 }
 
                 setTimeout(function () {
-                  _this2.alert = false;
+                  _this3.alert = false;
                 }, 3000);
 
               case 7:
@@ -2617,7 +2597,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     erase: function erase() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var result;
@@ -2625,27 +2605,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this3.alert = true;
+                _this4.alert = true;
                 _context3.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/category/delete", {
-                  id: _this3.id
+                  id: _this4.id
                 })["catch"](function (error) {
                   _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("errorAlert", "Please select Category");
                 });
 
               case 3:
                 result = _context3.sent;
-                _this3.selected = "";
+                _this4.selected = "";
 
                 if (result) {
                   _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("successAlert", "Category Has Been Deleted!");
-                  _this3.category = "";
+                  _this4.category = "";
 
-                  _this3.getCategories();
+                  _this4.getCategories();
                 }
 
                 setTimeout(function () {
-                  _this3.alert = false;
+                  _this4.alert = false;
                 }, 3000);
 
               case 7:
@@ -2676,6 +2656,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Alert_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Alert.vue */ "./resources/js/components/Alert.vue");
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
+/* harmony import */ var _inventory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./inventory */ "./resources/js/components/inventory.js");
 
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
@@ -2755,22 +2736,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    var _this = this;
+
+    _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$on("newInventory", function () {
+      _this.getInventories();
+    });
+  },
   components: {
     Alert: _Alert_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   mounted: function mounted() {
     this.getCategories();
-    this.getProperties();
     this.getInventories();
   },
   data: function data() {
     return {
       categoryArray: [],
-      propertyArray: [],
       inventoryArray: [],
       allProperties: {},
       propertyInfo: "",
@@ -2790,24 +2791,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     getInventories: function getInventories() {
-      var _this = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/inventories")["catch"](function (error) {
-                  return console.log(error);
-                });
+                return Object(_inventory__WEBPACK_IMPORTED_MODULE_4__["getInventories"])();
 
               case 2:
-                result = _context.sent;
-                _this.inventoryArray = result.data;
+                _this2.inventoryArray = _context.sent;
 
-              case 4:
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -2816,55 +2813,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     getCategories: function getCategories() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/categories")["catch"](function (error) {
-                  return console.log(error);
-                });
+                return Object(_inventory__WEBPACK_IMPORTED_MODULE_4__["getCategories"])();
 
               case 2:
-                result = _context2.sent;
-                _this2.categoryArray = result.data;
+                _this3.categoryArray = _context2.sent;
 
-              case 4:
+              case 3:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
-      }))();
-    },
-    getProperties: function getProperties() {
-      var _this3 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/propeties")["catch"](function (error) {
-                  return console.log(error);
-                });
-
-              case 2:
-                result = _context3.sent;
-                _this3.propertyArray = result.data;
-
-              case 4:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
       }))();
     },
     addProperty: function addProperty(e) {
@@ -2876,16 +2843,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onChangeEdit: function onChangeEdit(event) {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var inventoryId, result, data, _iterator, _step, property;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 inventoryId = event.target.value;
                 _this4.alert = true;
-                _context4.next = 4;
+                _context3.next = 4;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/getInventoryById/".concat(inventoryId))["catch"](function (err) {
                   debugger;
 
@@ -2904,12 +2871,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 4:
-                result = _context4.sent;
-                _context4.next = 7;
+                result = _context3.sent;
+                _context3.next = 7;
                 return result.data;
 
               case 7:
-                data = _context4.sent;
+                data = _context3.sent;
                 _iterator = _createForOfIteratorHelper(data.properties);
 
                 try {
@@ -2936,10 +2903,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 18:
               case "end":
-                return _context4.stop();
+                return _context3.stop();
             }
           }
-        }, _callee4);
+        }, _callee3);
       }))();
     },
     editProperty: function editProperty(event) {
@@ -2948,14 +2915,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getFormValues: function getFormValues() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 _this5.alert = true;
-                _context5.next = 3;
+                _context4.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/inventory/update", {
                   id: _this5.inventoryChosen,
                   inventory: _this5.selectedInventory,
@@ -2976,7 +2943,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 3:
-                result = _context5.sent;
+                result = _context4.sent;
 
                 if (result) {
                   _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("successAlert", "Inventory Has Been Updated!");
@@ -2990,29 +2957,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
               case "end":
-                return _context5.stop();
+                return _context4.stop();
             }
           }
-        }, _callee5);
+        }, _callee4);
       }))();
     },
     erase: function erase() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
         var result;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 _this6.alert = true;
-                _context6.next = 3;
+                _context5.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/inventory/delete", {
                   id: _this6.inventoryChosen
                 })["catch"](function (err) {});
 
               case 3:
-                result = _context6.sent;
+                result = _context5.sent;
 
                 if (result) {
                   _app__WEBPACK_IMPORTED_MODULE_3__["bus"].$emit("successAlert", "Inventory Has Been Deleted!");
@@ -3026,10 +2993,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
               case "end":
-                return _context6.stop();
+                return _context5.stop();
             }
           }
-        }, _callee6);
+        }, _callee5);
       }))();
     }
   }
@@ -41351,7 +41318,7 @@ var render = function() {
             attrs: { type: "button" },
             on: { click: _vm.edit }
           },
-          [_vm._v("Edit")]
+          [_vm._v("\n                Edit\n            ")]
         ),
         _vm._v(" "),
         _c(
@@ -41361,7 +41328,7 @@ var render = function() {
             attrs: { type: "button" },
             on: { click: _vm.erase }
           },
-          [_vm._v("Delete")]
+          [_vm._v("\n                Delete\n            ")]
         )
       ])
     ])
@@ -41607,7 +41574,7 @@ var render = function() {
                       attrs: { type: "button" },
                       on: { click: _vm.erase }
                     },
-                    [_vm._v("Delete")]
+                    [_vm._v("\n                    Delete\n                ")]
                   )
                 ],
                 2
@@ -57843,15 +57810,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***************************************************!*\
   !*** ./resources/js/components/EditInventory.vue ***!
   \***************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EditInventory_vue_vue_type_template_id_2e4aedd2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditInventory.vue?vue&type=template&id=2e4aedd2&scoped=true& */ "./resources/js/components/EditInventory.vue?vue&type=template&id=2e4aedd2&scoped=true&");
 /* harmony import */ var _EditInventory_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditInventory.vue?vue&type=script&lang=js& */ "./resources/js/components/EditInventory.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _EditInventory_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _EditInventory_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -57881,7 +57847,7 @@ component.options.__file = "resources/js/components/EditInventory.vue"
 /*!****************************************************************************!*\
   !*** ./resources/js/components/EditInventory.vue?vue&type=script&lang=js& ***!
   \****************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58198,6 +58164,136 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ViewInventory_vue_vue_type_template_id_2bb15f48_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ViewInventory_vue_vue_type_template_id_2bb15f48_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/inventory.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/inventory.js ***!
+  \**********************************************/
+/*! exports provided: getInventories, getCategories, getProperties */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getInventories", function() { return getInventories; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCategories", function() { return getCategories; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getProperties", function() { return getProperties; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+var getInventories = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    var result;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/inventories");
+
+          case 3:
+            result = _context.sent;
+            return _context.abrupt("return", result.data);
+
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context["catch"](0);
+            console.log(_context.t0);
+            return _context.abrupt("return", null);
+
+          case 11:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[0, 7]]);
+  }));
+
+  return function getInventories() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var getCategories = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+    var result;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/categories");
+
+          case 3:
+            result = _context2.sent;
+            return _context2.abrupt("return", result.data);
+
+          case 7:
+            _context2.prev = 7;
+            _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
+            return _context2.abrupt("return", null);
+
+          case 11:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+
+  return function getCategories() {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+var getProperties = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+    var result;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/propeties");
+
+          case 3:
+            result = _context3.sent;
+            return _context3.abrupt("return", result.data);
+
+          case 7:
+            _context3.prev = 7;
+            _context3.t0 = _context3["catch"](0);
+            console.log(_context3.t0);
+            return _context3.abrupt("return", null);
+
+          case 11:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 7]]);
+  }));
+
+  return function getProperties() {
+    return _ref3.apply(this, arguments);
+  };
+}();
 
 
 

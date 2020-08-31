@@ -28,6 +28,7 @@
 import axios from "axios";
 import Alert from "./Alert.vue";
 import { bus } from "../app";
+import { getCategories } from "./inventory";
 export default {
   components: {
     Alert,
@@ -60,7 +61,8 @@ export default {
         this.categorySaved = true;
         bus.$emit("successAlert", "New Category Has Been Saved!");
         this.category = "";
-        this.$emit("getCategories");
+        this.categoryArray = await getCategories();
+        bus.$emit("newCategory");
       }
       setTimeout(() => {
         this.alert = false;
