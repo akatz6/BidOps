@@ -1,4 +1,4 @@
-The use (Instruction are for a mac):
+To use (instruction are for a mac):
 1) Install Homebrew
 2) In terminal "homebrew install php composer mysql"
 3) In terminal "Git pull https://github.com/akatz6/BidOps.git"
@@ -15,7 +15,7 @@ DB_PORT=3306
 DB_DATABASE=laravel
 DB_USERNAME=root
 DB_PASSWORD=
-11) In mysql create Database Laravel and sellect as database.
+11) In mysql create Database laravel and sellect as database.
 12) In terminal "php artisan migrate"
 13) In terminal "php artisan serve"
 14) Open to tab in terminal and run "vendor/bin/phpunit" to run unit tests
