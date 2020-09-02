@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $this->validateInfo($request);
         $info = $request->all();
         $categoryFound = Category::where('category', $info['category'])->first();
-        if (count($categoryFound) > 0) {
+        if (isset($categoryFound)) {
             return response('Category already exists', 300);
         }
         $this->saveInfo($info);

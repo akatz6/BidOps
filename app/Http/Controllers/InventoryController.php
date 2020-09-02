@@ -42,7 +42,7 @@ class InventoryController extends Controller
         $info = $request->all();
         $this->validateProperties($info['all_properties']);
         $inventoryFound = Inventory::where('inventory', $info['inventory'])->first();
-        if (count($inventoryFound) > 0) {
+        if (isset($inventoryFound)) {
             return response('Inventory already exists', 300);
         }
         $this->saveInventory($info);

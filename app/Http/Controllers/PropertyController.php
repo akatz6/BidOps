@@ -39,7 +39,7 @@ class PropertyController extends Controller
         $this->validateInfo($request);
         $info = $request->all();
         $propertyFound = Property::where('property', $info['property'])->first();
-        if (count($propertyFound) > 0) {
+        if (isset($propertyFound)) {
             return response('Property already exists', 300);
         }
         $this->saveProperty($info);
